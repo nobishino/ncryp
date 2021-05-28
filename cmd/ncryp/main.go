@@ -1,15 +1,7 @@
 package main
 
-import (
-	"io"
-	"log"
-	"os"
-)
+import "fmt"
 
 func main() {
-	_, err := io.Copy(os.Stdout, os.Stdin)
-	if err != nil {
-		log.Println(err)
-		os.Exit(1)
-	}
+	fmt.Println("hello, ncryp")
 }
