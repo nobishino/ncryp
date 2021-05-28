@@ -26,3 +26,18 @@ archives:
         format: zip
 release:
   prerelease: auto
+brews:
+  - name: ncryp # CLI name
+    github:
+      owner: nobishino
+      name: homebrew-tap
+    url_template: "https://github.com/nobishino/ncryp/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+    commit_author: # homebrew-tapにcommitするときに使うGitHubアカウント
+      name: goreleaserbot
+      email: goreleaser@carlosbecker.com
+    # homepage:
+    description: "Weak Cryptography CLI for Learners." # 適当なdescription
+    test: |
+      system "#{bin}/ncryp --version"
+    install: | # Goならばバイナリ名でOK
+      bin.install "ncryp"
