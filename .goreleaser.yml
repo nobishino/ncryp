@@ -1,43 +1,66 @@
-project_name: ncryp
-env:
-  - GO111MODULE=on
+# This is an example goreleaser.yaml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
 before:
   hooks:
+    # you may remove this if you don't use vgo
     - go mod tidy
+    # you may remove this if you don't need go generate
+    #- go generate ./...
 builds:
   - main: ./cmd/ncryp
-    binary: ncryp
-    ldflags:
-      - -s -w
-      - -X main.Version={{.Version}}
-      - -X main.Revision={{.ShortCommit}}
     env:
       - CGO_ENABLED=0
 archives:
-  - name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
-    replacements:
-      darwin: darwin
-      linux: linux
-      windows: windows
+  - replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
       386: i386
       amd64: x86_64
-    format_overrides:
-      - goos: windows
-        format: zip
-release:
-  prerelease: auto
+checksum:
+  name_template: "checksums.txt"
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
 brews:
-  - name: ncryp # CLI name
-    tap:
+  - # Name template of the recipe
+    # Default to project name
+    name: ncryp
+
+    # Github repository to push the tap to.
+    github:
       owner: nobishino
       name: homebrew-tap
+
+    # Template for the url which is determined by the given Token (github or gitlab)
+    # Default for github is "https://github.com/<repo_owner>/<repo_name>/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+    # Default for gitlab is "https://gitlab.com/<repo_owner>/<repo_name>/uploads/{{ .ArtifactUploadHash }}/{{ .ArtifactName }}"
     url_template: "https://github.com/nobishino/ncryp/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-    commit_author: # homebrew-tapにcommitするときに使うGitHubアカウント
+
+    # Git author used to commit to the repository.
+    # Defaults are shown.
+    commit_author:
       name: goreleaserbot
       email: goreleaser@carlosbecker.com
-    # homepage:
-    description: "Weak Cryptography CLI for Learners." # 適当なdescription
+
+    # Your app's homepage.
+    # Default is empty.
+    # homepage: "https://"
+
+    # Your app's description.
+    # Default is empty.
+    description: "Weak Cryptography for Learners"
+
+    # So you can `brew test` your formula.
+    # Default is empty.
     test: |
       system "#{bin}/ncryp --version"
-    install: | # Goならばバイナリ名でOK
+    # Custom install script for brew.
+    # Default is 'bin.install "program"'.
+    install: |
       bin.install "ncryp"
