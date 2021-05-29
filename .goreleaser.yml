@@ -33,7 +33,7 @@ brews:
     name: ncryp
 
     # Github repository to push the tap to.
-    github:
+    tap:
       owner: nobishino
       name: homebrew-tap
 
