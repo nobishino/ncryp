@@ -10,9 +10,9 @@ import (
 func TestNaiveSymCryp(t *testing.T) {
 	testcases := [...]struct {
 		title  string
-		data   []byte
+		data   ncryp.Payload
 		key    ncryp.Key16
-		expect []byte
+		expect ncryp.Payload
 	}{
 		{
 			data:   []byte{0x0, 0x0, 0x0, 0x0},

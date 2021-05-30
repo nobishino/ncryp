@@ -4,7 +4,9 @@ package ncryp
 
 type Key16 [2]byte
 
-func NaiveSymCryp(data []byte, key Key16) []byte {
+type Payload []byte
+
+func NaiveSymCryp(data Payload, key Key16) Payload {
 	result := make([]byte, len(data))
 	for i, byt := range data {
 		result[i] = byt ^ key[i%2]
