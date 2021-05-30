@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/nobishino/ncryp"
 )
@@ -15,11 +16,15 @@ var (
 )
 
 func main() {
-	fmt.Println("hello, ncryp!")
-	key = *flag.String("key", "00", "1 byte key for encryption. e.g. 3E")
-	payload = *flag.String("payload", "", "byte sequence to encrypt")
-	naive = *flag.Bool("naive", false, "naive encryption mode")
+	switch {
+	case naive:
+		os.Exit(execNaive(payload, key))
+	default:
+		fmt.Println("helly, ncryp")
+	}
+}
 
+func execNaive(payload, key string) int {
 	p, err := ncryp.NewPayload(payload)
 	if err != nil {
 		log.Fatal(err)
@@ -33,5 +38,12 @@ func main() {
 	e := ncryp.NaiveSymCryp(p, key16)
 
 	fmt.Println(e)
+	return 0
+}
 
+func init() {
+	flag.StringVar(&key, "key", "00", "1 byte key for encryption. e.g. 3E")
+	flag.StringVar(&payload, "payload", "", "byte sequence to encrypt")
+	flag.BoolVar(&naive, "naive", false, "naive encryption mode")
+	flag.Parse()
 }
