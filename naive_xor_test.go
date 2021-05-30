@@ -65,3 +65,28 @@ func TestNewPayload(t *testing.T) {
 		})
 	}
 }
+
+func TestPayloadString(t *testing.T) {
+	testcases := [...]struct {
+		title  string
+		in     ncryp.Payload
+		expect string
+	}{
+		{
+			in:     []byte{0xFE},
+			expect: "FE",
+		},
+		{
+			in:     []byte{0xFE, 0x12},
+			expect: "FE12",
+		},
+	}
+	for _, tt := range testcases {
+		t.Run(tt.title, func(t *testing.T) {
+			got := tt.in.String()
+			if diff := cmp.Diff(got, tt.expect); diff != "" {
+				t.Errorf("expect %v, but got %v. diff:\n%s", tt.expect, got, diff)
+			}
+		})
+	}
+}

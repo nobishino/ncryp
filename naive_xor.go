@@ -1,7 +1,9 @@
 package ncryp
 
 import (
+	"fmt"
 	"strconv"
+	"strings"
 )
 
 // 16bit(2bytes)の共有鍵を使って平文に対して繰り返し単純にXORを適用するナイーブな共通鍵暗号を実装する
@@ -33,6 +35,14 @@ func NewPayload(s string) (Payload, error) {
 		result = append(result, byte(i))
 	}
 	return result, nil
+}
+
+func (p Payload) String() string {
+	var ss []string
+	for _, byt := range p {
+		ss = append(ss, fmt.Sprintf("%X", byt))
+	}
+	return strings.Join(ss, "")
 }
 
 func is(r rune) bool {
