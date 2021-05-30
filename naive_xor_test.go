@@ -29,3 +29,39 @@ func TestNaiveSymCryp(t *testing.T) {
 		})
 	}
 }
+
+func TestNewPayload(t *testing.T) {
+	testcases := [...]struct {
+		title  string
+		in     string
+		expect ncryp.Payload
+		isErr  bool
+	}{
+		{
+			in:     "FE",
+			expect: []byte{0xFE},
+		},
+		{
+			in:     "FE12",
+			expect: []byte{0xFE, 0x12},
+		},
+		{
+			in:    "FG",
+			isErr: true,
+		},
+	}
+	for _, tt := range testcases {
+		t.Run(tt.title, func(t *testing.T) {
+			got, err := ncryp.NewPayload(tt.in)
+			switch {
+			case !tt.isErr && err != nil:
+				t.Errorf("expect err to be nil but got %v", err)
+			case tt.isErr && err == nil:
+				t.Error("expect non-nil error but got nil")
+			}
+			if diff := cmp.Diff(got, tt.expect); diff != "" {
+				t.Errorf("expect %v, but got %v. diff:\n%s", tt.expect, got, diff)
+			}
+		})
+	}
+}
