@@ -9,10 +9,10 @@ import (
 func TestModPow(t *testing.T) {
 	testcases := [...]struct {
 		title  string
-		x      int
-		y      int
-		mod    int
-		expect int
+		x      uint64
+		y      uint64
+		mod    uint64
+		expect uint64
 	}{
 		{
 			title:  "#1",
