@@ -90,3 +90,28 @@ func TestPayloadString(t *testing.T) {
 		})
 	}
 }
+
+func TestKey16ToUint64(t *testing.T) {
+	testcases := [...]struct {
+		title  string
+		in     ncryp.Key16
+		expect uint64
+	}{
+		{
+			in:     [2]byte{0xF, 0x0},
+			expect: 15,
+		},
+		{
+			in:     [2]byte{0xFF, 0xFF},
+			expect: 65535,
+		},
+	}
+	for _, tt := range testcases {
+		t.Run(tt.title, func(t *testing.T) {
+			got := tt.in.Uint64()
+			if got != tt.expect {
+				t.Errorf("expect %v, but got %v", tt.expect, got)
+			}
+		})
+	}
+}

@@ -10,6 +10,10 @@ import (
 
 type Key16 [2]byte
 
+func (k Key16) Uint64() uint64 {
+	return uint64(k[1])<<8 + uint64(k[0])
+}
+
 type Payload []byte
 
 func NaiveSymCryp(data Payload, key Key16) Payload {
