@@ -14,7 +14,35 @@ func (k Key16) Uint64() uint64 {
 	return uint64(k[1])<<8 + uint64(k[0])
 }
 
+func Key16FromUint64(x uint64) Key16 {
+	var k Key16
+	k[0] = byte(x)
+	k[1] = byte(x >> 8)
+	return k
+}
+
 type Payload []byte
+
+func PayloadUint64(x uint64) Payload {
+	return []byte{
+		byte(x),
+		byte(x >> 8),
+		byte(x >> 16),
+		byte(x >> 24),
+		byte(x >> 32),
+		byte(x >> 40),
+		byte(x >> 48),
+		byte(x >> 56),
+	}
+}
+
+func (p Payload) Uint64() uint64 {
+	var result uint64
+	for i := 0; i < 8 && i < len(p); i++ {
+		result += uint64(p[i]) << (8 * i)
+	}
+	return result
+}
 
 func NaiveSymCryp(data Payload, key Key16) Payload {
 	result := make([]byte, len(data))
@@ -44,7 +72,7 @@ func NewPayload(s string) (Payload, error) {
 func (p Payload) String() string {
 	var ss []string
 	for _, byt := range p {
-		ss = append(ss, fmt.Sprintf("%X", byt))
+		ss = append(ss, fmt.Sprintf("%02X", byt))
 	}
 	return strings.Join(ss, "")
 }
